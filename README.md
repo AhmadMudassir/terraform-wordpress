@@ -1,3 +1,4 @@
+
 # 🚀 Terraform WordPress on AWS
 
 This project provisions a complete WordPress setup on AWS using Terraform. It automates the creation of a Virtual Private Cloud (VPC), subnet, security groups, and an EC2 instance, then installs WordPress using a user-data script.
@@ -39,6 +40,7 @@ Provision an EC2 instance on AWS using Terraform, install WordPress with MySQL o
 - ✅ Sets up Security Groups to allow HTTP (80), SSH (22)
 - ✅ Installs Apache, PHP, MySQL, and WordPress automatically
 - ✅ Sets up a WordPress database and configuration
+- ✅ Securely fetches database password from AWS Secrets Manager
 - ✅ Outputs EC2 instance public IP after provisioning
 
 ---
@@ -49,6 +51,7 @@ Provision an EC2 instance on AWS using Terraform, install WordPress with MySQL o
 - **AWS EC2, VPC, Subnet, Security Group**
 - **Apache2, PHP, MySQL**
 - **WordPress**
+- **AWS Secrets Manager**
 
 ---
 
@@ -58,6 +61,7 @@ Provision an EC2 instance on AWS using Terraform, install WordPress with MySQL o
 - AWS CLI configured (`aws configure`)
 - A valid AWS key pair
 - Sufficient IAM permissions to provision infrastructure
+- A secret in AWS Secrets Manager containing the DB password
 
 ---
 
@@ -68,7 +72,7 @@ Provision an EC2 instance on AWS using Terraform, install WordPress with MySQL o
 | `region`             | `us-east-2`                | AWS region                         |
 | `ami`                | `ami-004364947f82c87a0`    | Ubuntu-based AMI                   |
 | `type`               | `t2.micro`                 | EC2 instance type                  |
-| `keypair`            | `key-ahmad`                | Existing AWS key pair name         |
+| `keypair`            | `your-keypair-name`        | Existing AWS key pair name         |
 | `vpc-cidr`           | `10.0.0.0/16`              | CIDR block for the VPC             |
 | `subnet-cidr`        | `10.0.1.0/24`              | CIDR block for the public subnet   |
 | `all-traffic-cidr`   | `0.0.0.0/0`                | Open to all traffic (demo only)    |
@@ -106,6 +110,26 @@ Provision an EC2 instance on AWS using Terraform, install WordPress with MySQL o
 
 ---
 
+## 🔐 AWS Secrets Manager Integration
+
+This setup includes secure handling of database credentials using AWS Secrets Manager.
+
+### 🧾 Secret Details
+
+- Store your DB password in Secrets Manager under a name like `wordpress/creds`
+- Example secret JSON:
+```json
+{
+  "dbpass": "your-secure-password"
+}
+```
+
+### ⚙️ IAM Role
+
+An IAM role with `secretsmanager:GetSecretValue` and `secretsmanager:DescribeSecret` permissions is attached to the EC2 instance to fetch the password.
+
+---
+
 ## 🛡️ Security Group Rules
 
 | Port | Purpose     | Source      |
@@ -123,7 +147,9 @@ The `user-data.sh` script does the following:
 
 - Installs Apache, PHP, and MySQL
 - Downloads and configures WordPress
-- Sets up WordPress database and user
+- Installs AWS CLI and `jq`
+- Fetches database password securely from AWS Secrets Manager
+- Sets up WordPress database and user with the secret
 - Applies necessary Apache configurations
 - Injects WordPress security salts
 - Starts necessary services
@@ -178,3 +204,14 @@ vpc_id = "vpc-0f4a3..."
 - Improve security with limited CIDRs
 
 ---
+
+## 👤 Author
+
+**Ahmad** – Infrastructure Automation Enthusiast  
+[GitHub](https://github.com/your-username)
+
+---
+
+## 📝 License
+
+This project is open-source and available under the [MIT License](LICENSE).
