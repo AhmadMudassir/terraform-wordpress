@@ -204,14 +204,3 @@ vpc_id = "vpc-0f4a3..."
 - Improve security with limited CIDRs
 
 ---
-
-## 👤 Author
-
-**Ahmad** – Infrastructure Automation Enthusiast  
-[GitHub](https://github.com/your-username)
-
----
-
-## 📝 License
-
-This project is open-source and available under the [MIT License](LICENSE).
