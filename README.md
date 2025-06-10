@@ -83,7 +83,7 @@ Provision an EC2 instance on AWS using Terraform, install WordPress with MySQL o
 
 1. **Clone the repository**
    ```bash
-   git clone https://github.com/your-username/terraform-wordpress.git
+   git clone https://github.com/AhmadMudassir/terraform-wordpress.git
    cd terraform-wordpress
    ```
 
