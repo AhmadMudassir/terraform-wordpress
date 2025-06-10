@@ -72,6 +72,11 @@ resource "aws_security_group" "ahmad-sg-terra" {
     "owner" = var.owner
   }
 }
+resource "aws_iam_instance_profile" "ec2_secrets_profile" {
+  name = "EC2-SecretManager-ReadWrite-Profile"
+  role = "EC2-SecretManager-ReadWrite"
+}
+
 
 resource "aws_instance" "ahmad-ec2-terra" {
   ami = var.ami
@@ -81,7 +86,8 @@ resource "aws_instance" "ahmad-ec2-terra" {
   subnet_id = aws_subnet.ahmad-public-subnet-terra.id
   vpc_security_group_ids = [ aws_security_group.ahmad-sg-terra.id ]
   associate_public_ip_address = true
-
+  
+  iam_instance_profile = aws_iam_instance_profile.ec2_secrets_profile.name
   user_data = file("user-data.sh")
 
   tags = {
