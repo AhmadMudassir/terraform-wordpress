@@ -52,7 +52,6 @@ sudo ./aws/install
 
 sudo apt install -y jq
 
-echo "Fetching DB password from Secrets Manager..."
 DB_SECRET=$(aws secretsmanager get-secret-value --secret-id ahmad/wordpress/creds --region us-east-2 --query SecretString --output text)
 
 DB_PASS=$(echo "$DB_SECRET" | jq -r .dbpass)
